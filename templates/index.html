@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Reddit Sentiment Analysis</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h2 class="text-center mt-4">Reddit Sentiment Analysis</h2>
+        <form id="sentimentForm" class="mt-4">
+            <div class="form-group">
+                <label for="text">Enter Reddit Comment:</label>
+                <textarea id="text" name="text" class="form-control" rows="4" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Analyze Sentiment</button>
+        </form>
+        <div id="result" class="mt-4"></div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#sentimentForm').on('submit', function (e) {
+                e.preventDefault();
+                const userText = $('#text').val();
+                $.ajax({
+                    url: "/predict",
+                    type: "POST",
+                    data: { text: userText },
+                    success: function (response) {
+                        $('#result').html(
+                            `<h4>Sentiment: ${response.sentiment}</h4>
+                             <p>Confidence: ${response.probability}</p>
+                             <p>Input: ${response.input_text}</p>`
+                        );
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
